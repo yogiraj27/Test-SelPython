@@ -1,0 +1,38 @@
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common import alert
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.flightradar24.com/data/airports/pnq")
+driver.maximize_window()
+
+# message = driver.find_element(By.ID,"onetrust-accept-btn-handler").text
+# print(message)
+
+driver.find_element(By.ID,"onetrust-accept-btn-handler").click()
+
+message = driver.find_element(By.XPATH,"//a[contains(@class,'link-like-tab m-l-m')]").text
+assert message == "Show all arrivals"
+print("reached the booking page successfully")
+
+list_cities = ['Bangalore','Delhi','Goa','Chandigarh','Hyderabad','Nagpur','Dubai']
+cities = driver.find_elements(By.XPATH,"(//table[contains(@class,'table table-condensed table-hover data-table m-n-t-15')])[1]/tbody")
+
+#for i in list_cities:
+for city in cities:
+    if city.find_element(By.XPATH,'tr/td[3]/div/span').text in list_cities:
+        print(f'{city.find_element(By.XPATH,'tr/td[3]/div/span').text} : {city.find_element(By.XPATH,'tr/td[7]').text} ')
+    else:
+        print(f'{city.find_element(By.XPATH,'tr/td[3]/div/span').text} : data not available')
+
+
+driver.close()
+
+# OUTPUT:
+# "C:\Users\Yogi Raj\AppData\Local\Programs\Python\Python312\python.exe" "C:\Users\Yogi Raj\PycharmProjects\RahulShetty\pythonSelenium\airport.py" 
+# reached the booking page successfully
+# Goa : Estimated 4:50 PM 
+# 
+# Process finished with exit code 0
